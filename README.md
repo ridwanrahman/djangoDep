@@ -3,3 +3,5 @@ A reusable Django starter project with a clean base (main), and each branch repr
 
 ## Description of other branches
 1. setup-django: Basic Django setup with a clean project structure.
+2. github-actions: GitHub Actions CI/CD setup for automated testing and deployment.
+3. 
