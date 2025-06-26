@@ -8,7 +8,7 @@ load_dotenv()
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoDep.settings')
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_dep.settings')
     current_path = os.path.dirname(os.path.abspath(__file__))
     sys.path.insert(0, os.path.join(current_path, 'src'))
     try:
