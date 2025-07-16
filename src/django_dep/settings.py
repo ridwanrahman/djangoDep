@@ -9,11 +9,18 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+from django.conf.global_settings import CSRF_TRUSTED_ORIGINS
+from dotenv import load_dotenv
+
+load_dotenv()
+
 import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+REPO_DIR = BASE_DIR.parent
+TEMPLATES_DIR = REPO_DIR / "templates"
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,9 +30,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    ".railway.app"
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.railway.app",
+]
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -49,12 +65,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_dep.urls'
+ROOT_URLCONF = 'src.django_dep.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
