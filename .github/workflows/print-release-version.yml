@@ -7,6 +7,9 @@ on:
 jobs:
   print_version:
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_STEP_DEBUG: true
+      ACTIONS_RUNNER_DEBUG: true
     steps:
         - name: Print Release Version
           run: |
