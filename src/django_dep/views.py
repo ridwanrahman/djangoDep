@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from djangoDep.version import __version__
 
 def hello_world(request):
     """
@@ -18,7 +17,7 @@ def get_version(request):
         from importlib_metadata import version
 
     app_version = version("djangoDep")
-    app_version2 = __version__
+    # app_version2 = __version__
     return HttpResponse(f"Version: {app_version}", status=200)
 
 

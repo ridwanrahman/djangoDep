@@ -1,6 +1,4 @@
-try:
-    from importlib.metadata import version
-except ImportError:
-    from importlib_metadata import version
+import djangoDep.version as v
 
-__version__ = version("djangoDep")
+print(v.version)
+print(v.version_tuple)
