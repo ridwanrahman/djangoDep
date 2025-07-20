@@ -27,10 +27,16 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch --tags
           LATEST_TAG=$(git describe --tags --abbrev=0 --always)
-          echo "Latest release tag: $LATEST_TAG"
+          echo -n > version.txt                      # Empty the file
+          echo "$LATEST_TAG" >> version.txt         # Write the latest tag
           git add version.txt
-          git commit -m "chore: update version.txt to $LATEST_TAG || echo "No changes to commit"
-          git push
+          # Only commit if there are actual changes
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update version.txt to $LATEST_TAG"
+            git push
+          else
+            echo "No changes to commit"
+          fi
   print_version:
     runs-on: ubuntu-latest
     env:
