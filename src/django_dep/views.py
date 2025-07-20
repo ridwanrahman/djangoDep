@@ -1,11 +1,26 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from djangoDep.version import __version__
 
 def hello_world(request):
     """
     A simple view that returns a 'Hello, World!' message.
     """
     return render(request, 'hello_world.html', {'message': 'Hello, World!'})
+
+def get_version(request):
+    """
+    A view that returns the version of the Django application.
+    """
+    try:
+        from importlib.metadata import version
+    except ImportError:
+        from importlib_metadata import version
+
+    app_version = version("djangoDep")
+    app_version2 = __version__
+    return HttpResponse(f"Version: {app_version}", status=200)
+
 
 
 def healthcheck(request):
