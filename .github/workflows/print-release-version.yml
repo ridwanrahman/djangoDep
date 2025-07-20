@@ -1,10 +1,10 @@
 name: Print Release Version
 
 on:
-  push:
-    branches: [ "versioning" ]
-#  release:
-#    types: [created]
+#  push:
+#    branches: [ "versioning" ]
+  release:
+    types: [created]
 permissions:
   contents: write
 
