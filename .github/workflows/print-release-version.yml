@@ -14,7 +14,7 @@ jobs:
         - name: Print Release Version
           run: |
             echo "Release version is ${{ github.event.release.tag_name }}"
-            echo "${{ github.event.release.tag_name }}" > version.txt
+            echo "${{ github.event.release.tag_name }}" > /home/runner/work/djangoDep/djangoDep/version.txt
             echo "Current directory is: $(pwd)"
             echo "Absolute path to version.txt is: $(realpath version.txt)"
 #            env:
