@@ -7,6 +7,7 @@ on:
 #    types: [created]
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   update_version:
@@ -15,7 +16,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Fetch full history and all tags
           persist-credentials: true  # uses GITHUB_TOKEN by default
       - name: Set release version
         run: |
@@ -29,14 +30,25 @@ jobs:
           LATEST_TAG=$(git describe --tags --abbrev=0 --always)
           echo -n > version.txt                      # Empty the file
           echo "$LATEST_TAG" >> version.txt         # Write the latest tag
+      - name: Commit version.txt to branch
+        run: |
+          git checkout -b update-version-txt-${{ github.run_number }}
           git add version.txt
-          # Only commit if there are actual changes
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: update version.txt to $LATEST_TAG"
-            git push
-          else
+          if git diff --cached --quiet; then
             echo "No changes to commit"
+            exit 0
           fi
+          git commit -m "chore: update version.txt to $LATEST_TAG"
+          git push origin HEAD
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: "chore: update version.txt to ${{ env.LATEST_TAG }}"
+          commit-message: "chore: update version.txt to ${{ env.LATEST_TAG }}"
+          base: versioning  # Change to your target branch
+          branch: update-version-txt-${{ github.run_number }}
+          body: |
+            This PR was created automatically to update the application version to `${{ env.LATEST_TAG }}`.
   print_version:
     runs-on: ubuntu-latest
     env:
@@ -46,9 +58,9 @@ jobs:
         - name: Print Release Version
           run: |
             echo "Release version is ${{ github.event.release.tag_name }}"
-            echo "${{ github.event.release.tag_name }}" > /home/runner/work/djangoDep/djangoDep/version.txt
-            echo "Current directory is: $(pwd)"
-            echo "Absolute path to version.txt is: $(realpath version.txt)"
+#            echo "${{ github.event.release.tag_name }}" > /home/runner/work/djangoDep/djangoDep/version.txt
+#            echo "Current directory is: $(pwd)"
+#            echo "Absolute path to version.txt is: $(realpath version.txt)"
 #            env:
 #            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        - name: Print Release Name
